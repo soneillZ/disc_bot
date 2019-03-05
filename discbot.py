@@ -5,202 +5,76 @@ from decimal import Decimal
 from bs4 import BeautifulSoup
 import requests
 import lxml.html
-
-def getTimeDay_UK():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=919&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[0]
-
-def getTimeHour_UK():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=919&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[1]
-
-def getTimeMinutes_UK():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=919&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[2]
-
-
-
-def getTimeDay_NA():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=179&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[0]
-
-def getTimeHour_NA():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=179&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[1]
-
-def getTimeMinutes_NA():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=179&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[2]
-
-
-
-def getTimeDay_FR():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=195&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[0]
-
-def getTimeHour_FR():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=195&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[1]
-
-def getTimeMinutes_FR():
-
-    monday_timer_page = requests.get("https://www.timeanddate.com/countdown/generic?iso=20190304T00&p0=195&font=cursive")
-    src = monday_timer_page.content
-    soup = BeautifulSoup(src, 'html.parser')
-
-    global clock_digits
-    clock_digits = []
-
-    for number in soup.find_all('div', class_ = 'csvg-digit-number'):
-        clock_digits.append(number.text)
-
-
-    clock_digits.pop()
-
-    
-    return clock_digits[2]
-
+import datetime
+import string
+from io import BytesIO
+from lxml import html
+import os
+import json
+from nested_lookup import nested_lookup
+
+curr_day = datetime.date.today()
+days_to_friday = datetime.timedelta(days=4)
+days_to_monday = datetime.timedelta(days=3)
+
+class Time:
+    seconds_to_friday = days_to_friday.total_seconds()
+    seconds_to_monday = days_to_monday.total_seconds()
 
 client = discord.Client()
 
 @client.event
 async def on_ready():
-    print('Logged in as: {0.user}'.format(client))
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
-
-    if message.content.startswith('.wipe'):
-
-        msg_header = await client.send_message(message.channel, '**Wipe Times for Paranoid Servers** \n')
-        msg = await client.send_message(message.channel, '[Paranoid.gg EU 3x Solo Only **[UK]**] : ')
-        msg2 = await client.send_message(message.channel, '[Paranoid.gg US 3x Solo/Duo/Trio **[NA]**] : ')
-        msg3 = await client.send_message(message.channel, '[Paranoid.gg US 3x Solo Only **[NA]**] : ')
-        msg4 = await client.send_message(message.channel, '[Paranoid.gg EU 5x 6MAX **[France]**] : ')
-        msg5 = await client.send_message(message.channel, '[Paranoid.gg EU 3x Solo/Duo/Trio **[France]**] : ')
+    if (curr_day.isoweekday() == 1):
 
         while True:
 
-            await client.edit_message(msg, '[Paranoid.gg EU 3x Solo Only **[UK]**] : ' + getTimeDay_UK() + ' Day(s), ' + getTimeHour_UK() + ' hrs' + ' and ' + getTimeMinutes_UK() + ' minutes.')
-            await client.edit_message(msg2, '[Paranoid.gg US 3x Solo/Duo/Trio **[NA]**] : ' + getTimeDay_NA() + ' Day(s), ' + getTimeHour_NA() + ' hrs' + ' and ' + getTimeMinutes_NA() + ' minutes.')
-            await client.edit_message(msg3, '[Paranoid.gg US 3x Solo Only **[NA]**] : ' + getTimeDay_NA() + ' Day(s), ' + getTimeHour_NA() + ' hrs' + ' and ' + getTimeMinutes_NA() + ' minutes.')
-            await client.edit_message(msg4, '[Paranoid.gg EU 5x 6MAX **[France]**] : ' + getTimeDay_FR() + ' Day(s), ' + getTimeHour_FR() + ' hrs' + ' and ' + getTimeMinutes_FR() + ' minutes.')
-            await client.edit_message(msg5, '[Paranoid.gg EU 3x Solo/Duo/Trio **[France]**] : ' + getTimeDay_FR() + ' Day(s), ' + getTimeHour_FR() + ' hrs' + ' and ' + getTimeMinutes_FR() + ' minutes.')
+            sectofri = Time.seconds_to_friday
 
-        
+
+            em_1 = discord.Embed(title='**EU 3X SOLO/DUO/TRIO** \nHours to Wipe:', description= str(round(sectofri / 3600 , 1)), colour=0x388CBA)
+            msg = await client.send_message(client.get_channel('552255139424239626'), embed=em_1)
+
+            while True:
+
+
+                print(sectofri)
+
+
+                em_1 = discord.Embed(title='**EU 3X SOLO/DUO/TRIO** \nHours until Wipe:', description= '**' + str(round(sectofri / 3600 , 1)) + '**' + ' hours.', colour=0x388CBA)
+                await client.edit_message(msg, embed=em_1)
+
+                time.sleep(1)
+
+                sectofri = sectofri - 1
+
+    elif (curr_day.isoweekday() == 5):
+
+        while True:
+
+            sectomon = Time.seconds_to_monday
+            em_1 = discord.Embed(title='**EU 3X SOLO/DUO/TRIO** \nHours until Wipe:', description= str(round(sectomon / 3600 , 1)), colour=0x388CBA)
+            msg = await client.send_message(client.get_channel('552255139424239626'), embed=em_1)
+
+            while True:
+
+                print(sectomon)
+
+
+                em_1 = discord.Embed(title='**EU 3X SOLO/DUO/TRIO** \nHours until Wipe:', description= str(round(sectomon / 3600 , 1)) + ' hours.', colour=0x388CBA)
+                await client.edit_message(msg, embed=em_1)
+
+                time.sleep(1)
+
+                sectomon = sectomon - 1
+
+    else:
+
+        em_1 = discord.Embed(title='**Waiting for server(s) to wipe. **', description= '', colour=0x388CBA)
+
+        msg = await client.send_message(client.get_channel('552255139424239626'), embed=em_1)
+
+        print("Wipe countdown will only start once bot can determine that it is wipe day.")
 
 client.run('NTUxNDQ0NTI1NTgzOTU4MDE3.D1xnvw.qNOiHXI6mSTf_4hlz6jY4WtEOss')
