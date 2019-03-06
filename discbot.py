@@ -92,4 +92,4 @@ async def on_ready():
 
         print("Wipe countdown will only start once bot can determine that it is wipe day.")
 
-client.run('NTUxNDQ0NTI1NTgzOTU4MDE3.D1xnvw.qNOiHXI6mSTf_4hlz6jY4WtEOss')
+client.run('#ENTER TOKEN HERE#')
