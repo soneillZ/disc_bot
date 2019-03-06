@@ -77,7 +77,7 @@ async def on_ready():
                 print(sectomon)
 
 
-                em_1 = discord.Embed(title='**Paranoid.gg EU 3x Solo /Duo/Trio** \n', description= 'Hours until Wipe: ' + str(round(sectomon / 3600 , 1)) + ' hours.', colour=0x388CBA)
+                em_1 = discord.Embed(title='**Wipe Times** \n', description= 'Paranoid.gg EU 3x Solo /Duo/Trio: ' + '**' + str(round(sectomon / 3600 , 1)) + '**' + ' hours.\n\n' + 'Paranoid.gg EU 5x 6MAX: ' + '**' + str(round(sectomon / 3600 , 1)) + '**' + ' hours.\n\n' + 'Paranoid.gg EU Vanilla 2x: ' + '**' + str(round((sectomon - 3600) / 3600 , 1)) + '**' + ' hours.\n\n' + 'Paranoid.gg EU 3x Solo Only: ' + '**' + str(round((sectomon - 3600) / 3600 , 1)) + '**' + ' hours.\n\n' + 'Paranoid.gg US 3x Solo/Duo/Trio: ' + '**' + str(round((sectomon - 21600) / 3600 , 1)) + '**' + ' hours.\n\n' + 'Paranoid.gg US 3x Solo Only: ' + '**' + str(round((sectomon - 21600) / 3600 , 1)) + '**' + ' hours.\n\n', colour=0x388CBA)
                 await client.edit_message(msg, embed=em_1)
 
                 time.sleep(1)
