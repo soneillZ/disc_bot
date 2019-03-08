@@ -19,18 +19,6 @@ from lxml import html
 import os
 import json
 
-curl_url - system.os("https://api.battlemetrics.com/servers/2082241")
-print(curl_url)
-
-
-
-
-
-
-
-
-'''
-
 curr_day = datetime.date.today()
 days_to_friday = datetime.timedelta(days=4)
 days_to_monday = datetime.timedelta(days=3)
